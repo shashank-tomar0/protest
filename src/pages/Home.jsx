@@ -84,7 +84,7 @@ export default function Home() {
         <div className="photo-hero__bg">
           <object data="/images/sonam-wangchuk-carried.svg" type="image/svg+xml"
             aria-label="Sonam Wangchuk being carried by Delhi Police at Jantar Mantar, July 18, 2026"
-            className="w-full h-full" style={{ objectFit: 'cover' }} />
+            style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
         </div>
         <div className="photo-hero__content">
           <div className="strapline" style={{ color: 'var(--color-accent-ink)', opacity: 0.7 }}>
