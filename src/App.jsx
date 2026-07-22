@@ -1,7 +1,6 @@
-import { BrowserRouter, Routes, Route } from 'react-router-dom'
-import { motion, AnimatePresence } from 'framer-motion'
-import Navbar from './components/Navbar'
-import Footer from './components/Footer'
+import { BrowserRouter, Routes, Route, useLocation } from 'react-router-dom'
+import { AnimatePresence } from 'framer-motion'
+import { useRef, useEffect, useState } from 'react'
 import Home from './pages/Home'
 import Movement from './pages/Movement'
 import Timeline from './pages/Timeline'
@@ -10,44 +9,56 @@ import Donate from './pages/Donate'
 import Contact from './pages/Contact'
 
 const pageVariants = {
-  initial: { opacity: 0, y: 20 },
-  animate: { opacity: 1, y: 0, transition: { duration: 0.35, ease: 'easeOut' } },
-  exit: { opacity: 0, y: -20, transition: { duration: 0.2, ease: 'easeIn' } },
+  initial: { opacity: 0 },
+  animate: { opacity: 1, transition: { duration: 0.3 } },
+  exit: { opacity: 0, transition: { duration: 0.2 } },
 }
 
-const pageTransition = (key, Page) => (
-  <motion.div
-    key={key}
-    variants={pageVariants}
-    initial="initial"
-    animate="animate"
-    exit="exit"
-  >
-    <Page />
-  </motion.div>
-)
+function AnimatedPage({ children, paths }) {
+  const location = useLocation()
+  const [displayChildren, setDisplayChildren] = useState(children)
+  const [transitionStage, setTransitionStage] = useState('animate')
+  const prevPath = useRef(location.pathname)
 
-function App() {
+  useEffect(() => {
+    if (location.pathname !== prevPath.current) {
+      setTransitionStage('initial')
+      const timeout = setTimeout(() => {
+        setDisplayChildren(children)
+        setTransitionStage('animate')
+        prevPath.current = location.pathname
+      }, 200)
+      return () => clearTimeout(timeout)
+    } else {
+      setDisplayChildren(children)
+    }
+  }, [location.pathname])
+
+  return <div style={{ opacity: transitionStage === 'animate' ? 1 : 0, transition: 'opacity 0.3s' }}>{displayChildren}</div>
+}
+
+function AppRoutes() {
+  const location = useLocation()
+  const isHome = location.pathname === '/'
+
   return (
-    <BrowserRouter>
-      <div className="min-h-screen bg-cjp-accent">
-        <Navbar />
-        <main id="main-content" className="pt-16 lg:pt-20" role="main">
-          <AnimatePresence mode="wait">
-            <Routes>
-              <Route path="/" element={pageTransition('home', Home)} />
-              <Route path="/movement" element={pageTransition('movement', Movement)} />
-              <Route path="/timeline" element={pageTransition('timeline', Timeline)} />
-              <Route path="/action" element={pageTransition('action', TakeAction)} />
-              <Route path="/donate" element={pageTransition('donate', Donate)} />
-              <Route path="/contact" element={pageTransition('contact', Contact)} />
-            </Routes>
-          </AnimatePresence>
-        </main>
-        <Footer />
-      </div>
-    </BrowserRouter>
+    <AnimatedPage>
+      <Routes location={location} key={location.pathname}>
+        <Route path="/" element={<Home />} />
+        <Route path="/movement" element={<Movement />} />
+        <Route path="/timeline" element={<Timeline />} />
+        <Route path="/action" element={<TakeAction />} />
+        <Route path="/donate" element={<Donate />} />
+        <Route path="/contact" element={<Contact />} />
+      </Routes>
+    </AnimatedPage>
   )
 }
 
-export default App
+export default function App() {
+  return (
+    <BrowserRouter>
+      <AppRoutes />
+    </BrowserRouter>
+  )
+}
