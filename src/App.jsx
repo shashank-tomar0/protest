@@ -1,6 +1,5 @@
 import { BrowserRouter, Routes, Route, useLocation } from 'react-router-dom'
-import { AnimatePresence } from 'framer-motion'
-import { useRef, useEffect, useState } from 'react'
+import { useEffect, useState, useRef } from 'react'
 import Home from './pages/Home'
 import Movement from './pages/Movement'
 import Timeline from './pages/Timeline'
@@ -8,39 +7,31 @@ import TakeAction from './pages/TakeAction'
 import Donate from './pages/Donate'
 import Contact from './pages/Contact'
 
-const pageVariants = {
-  initial: { opacity: 0 },
-  animate: { opacity: 1, transition: { duration: 0.3 } },
-  exit: { opacity: 0, transition: { duration: 0.2 } },
-}
-
-function AnimatedPage({ children, paths }) {
+function AnimatedPage({ children }) {
   const location = useLocation()
-  const [displayChildren, setDisplayChildren] = useState(children)
-  const [transitionStage, setTransitionStage] = useState('animate')
-  const prevPath = useRef(location.pathname)
+  const [display, setDisplay] = useState(children)
+  const [stage, setStage] = useState('animate')
+  const prev = useRef(location.pathname)
 
   useEffect(() => {
-    if (location.pathname !== prevPath.current) {
-      setTransitionStage('initial')
-      const timeout = setTimeout(() => {
-        setDisplayChildren(children)
-        setTransitionStage('animate')
-        prevPath.current = location.pathname
+    if (location.pathname !== prev.current) {
+      setStage('initial')
+      const t = setTimeout(() => {
+        setDisplay(children)
+        setStage('animate')
+        prev.current = location.pathname
       }, 200)
-      return () => clearTimeout(timeout)
+      return () => clearTimeout(t)
     } else {
-      setDisplayChildren(children)
+      setDisplay(children)
     }
   }, [location.pathname])
 
-  return <div style={{ opacity: transitionStage === 'animate' ? 1 : 0, transition: 'opacity 0.3s' }}>{displayChildren}</div>
+  return <div style={{ opacity: stage === 'animate' ? 1 : 0, transition: 'opacity 0.3s' }}>{display}</div>
 }
 
 function AppRoutes() {
   const location = useLocation()
-  const isHome = location.pathname === '/'
-
   return (
     <AnimatedPage>
       <Routes location={location} key={location.pathname}>
