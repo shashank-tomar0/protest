@@ -2,7 +2,7 @@ import { useState } from 'react'
 import { motion } from 'framer-motion'
 import { Link } from 'react-router-dom'
 import {
-  Heart, Shield, Check, CreditCard, Banknote, Coin, ArrowRight,
+  Heart, Shield, Check, CreditCard, Banknote, ArrowRight,
   ExternalLink, Info, AlertCircle, Users, Flag, Target, Leaf,
   Hospital, Briefcase, Globe, Lock, Download, Share2, Copy,
   Building2, Scale, Calendar, Smartphone, Megaphone
