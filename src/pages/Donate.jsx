@@ -4,6 +4,111 @@ import { Link } from 'react-router-dom'
 export default function Donate() {
   const [amount, setAmount] = useState(2000)
   const [custom, setCustom] = useState('')
+  const [status, setStatus] = useState('idle') // idle | processing | success | error
+  const [message, setMessage] = useState('')
+
+  function loadRazorpay() {
+    return new Promise((resolve) => {
+      if (window.Razorpay) return resolve(true)
+      const script = document.createElement('script')
+      script.src = 'https://checkout.razorpay.com/v1/checkout.js'
+      script.async = true
+      script.onload = () => resolve(true)
+      script.onerror = () => resolve(false)
+      document.body.appendChild(script)
+    })
+  }
+
+  async function handleDonate() {
+    if (amount < 100) {
+      setStatus('error')
+      setMessage('Minimum donation is ₹100')
+      return
+    }
+
+    setStatus('processing')
+    setMessage('')
+
+    try {
+      const loaded = await loadRazorpay()
+      if (!loaded) {
+        setStatus('error')
+        setMessage('Failed to load payment gateway. Please try again.')
+        return
+      }
+
+      // Create Razorpay order via our API
+      const orderRes = await fetch('/api/create-order', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ amount: amount * 100 }), // paise
+      })
+      const orderData = await orderRes.json()
+
+      if (!orderRes.ok) {
+        // If Razorpay isn't configured, show UPI info
+        if (orderRes.status === 503) {
+          setStatus('idle')
+          setMessage('Online payments are being set up. Please use the Contact page or UPI: standwithsonam@upi')
+          return
+        }
+        setStatus('error')
+        setMessage(orderData.error || 'Failed to create order')
+        return
+      }
+
+      // Open Razorpay checkout
+      const options = {
+        key: window.RAZORPAY_KEY_ID || orderData.key_id,
+        amount: orderData.amount,
+        currency: orderData.currency || 'INR',
+        name: 'Stand With Sonam Wangchuk',
+        description: `Donation — ₹${amount.toLocaleString()}`,
+        order_id: orderData.orderId,
+        handler: async function (response) {
+          // Verify payment server-side
+          const verifyRes = await fetch('/api/verify-payment', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+              razorpay_order_id: response.razorpay_order_id,
+              razorpay_payment_id: response.razorpay_payment_id,
+              razorpay_signature: response.razorpay_signature,
+            }),
+          })
+          const verifyData = await verifyRes.json()
+
+          if (verifyData.verified) {
+            setStatus('success')
+            setMessage('Thank you! Your donation of ₹' + amount.toLocaleString() + ' has been received. You will receive a receipt by email.')
+          } else {
+            setStatus('error')
+            setMessage('Payment verification failed. Please contact us with your payment ID.')
+          }
+        },
+        modal: {
+          ondismiss: function () {
+            setStatus('idle')
+            setMessage('Payment cancelled. You can try again anytime.')
+          },
+        },
+        prefill: {
+          contact: '',
+          email: '',
+        },
+        theme: {
+          color: '#C1121F',
+        },
+      }
+
+      const rzp = new window.Razorpay(options)
+      rzp.open()
+    } catch (err) {
+      console.error('Donation error:', err)
+      setStatus('error')
+      setMessage('Something went wrong. Please try again or use the Contact page.')
+    }
+  }
 
   return (
     <main id="top">
@@ -67,6 +172,19 @@ export default function Donate() {
             Donation <span style={{ color: 'var(--color-accent)' }}>Tiers</span>
           </h2>
         </div>
+
+        {status === 'success' && (
+          <div className="pledge" style={{ borderTop: '2px solid var(--color-teal)', marginBottom: 'var(--space-xl)', padding: 'var(--space-lg)', textAlign: 'center' }}>
+            <p style={{ fontSize: 'var(--text-xl)', fontFamily: 'var(--font-display)', textTransform: 'uppercase', color: 'var(--color-ink)' }}>✅ {message}</p>
+          </div>
+        )}
+
+        {status === 'error' && (
+          <div className="pledge" style={{ borderTop: '2px solid var(--color-accent)', marginBottom: 'var(--space-xl)', padding: 'var(--space-lg)', textAlign: 'center' }}>
+            <p style={{ fontSize: 'var(--text-lg)', fontFamily: 'var(--font-mono)', color: 'var(--color-accent)' }}>⚠️ {message}</p>
+          </div>
+        )}
+
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(200px, 1fr))', gap: 'var(--space-md)', marginBottom: 'var(--space-xl)' }}>
           {[
             { amount: 500, label: 'Supporter', desc: '1 day of legal aid' },
@@ -76,7 +194,7 @@ export default function Donate() {
             { amount: 25000, label: 'Pillar', desc: '1 outreach camp' },
             { amount: 50000, label: 'Visionary', desc: '1 month of operations' },
           ].map((t) => (
-            <button key={t.amount} onClick={() => { setAmount(t.amount); setCustom('') }}
+            <button key={t.amount} onClick={() => { setAmount(t.amount); setCustom(''); setStatus('idle'); setMessage('') }}
               className="card-broadsheet" style={{ cursor: 'pointer', textAlign: 'left', border: amount === t.amount ? '2px solid var(--color-accent)' : undefined }}>
               <p className="plank__num" style={{ marginBottom: 'var(--space-xs)' }}>₹{t.amount.toLocaleString()}</p>
               <p className="plank__slab" style={{ fontSize: 'clamp(1rem, 2vw, 1.5rem)', marginBottom: 'var(--space-xs)' }}>{t.label}</p>
@@ -84,13 +202,18 @@ export default function Donate() {
             </button>
           ))}
         </div>
+
         <div style={{ display: 'flex', gap: 'var(--space-sm)', alignItems: 'center', flexWrap: 'wrap' }}>
           <span className="plank__num" style={{ fontSize: 'var(--text-sm)', paddingTop: 0 }}>Custom: ₹</span>
-          <input type="number" value={custom} onChange={(e) => { setCustom(e.target.value); setAmount(parseInt(e.target.value) || 0) }}
+          <input type="number" value={custom} onChange={(e) => { setCustom(e.target.value); setAmount(parseInt(e.target.value) || 0); setStatus('idle'); setMessage('') }}
             className="input-broadsheet" style={{ maxWidth: '150px' }} placeholder="Enter amount" min="100" />
-          <button className="btn">Donate ₹{amount.toLocaleString()} →</button>
+          <button className="btn" onClick={handleDonate} disabled={status === 'processing'}>
+            {status === 'processing' ? 'Processing…' : `Donate ₹${amount.toLocaleString()} →`}
+          </button>
         </div>
-        <p className="caption" style={{ marginTop: 'var(--space-md)' }}>UPI / Credit Card / Net Banking · 80G Tax Exemption (India) · International donors welcome</p>
+        <p className="caption" style={{ marginTop: 'var(--space-md)' }}>
+          {status === 'processing' ? 'Opening payment gateway…' : 'UPI / Credit Card / Net Banking · 80G Tax Exemption (India) · International donors welcome'}
+        </p>
       </section>
 
       <footer className="sheet colophon">

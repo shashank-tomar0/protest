@@ -11,6 +11,62 @@ const faqs = [
 
 export default function Contact() {
   const [open, setOpen] = useState(null)
+
+  // Contact form state
+  const [contact, setContact] = useState({ name: '', email: '', subject: 'General inquiry', message: '' })
+  const [contactStatus, setContactStatus] = useState('idle')
+  const [contactMsg, setContactMsg] = useState('')
+
+  // Newsletter state
+  const [newsletterEmail, setNewsletterEmail] = useState('')
+  const [newsletterStatus, setNewsletterStatus] = useState('idle')
+
+  async function handleContactSubmit(e) {
+    e.preventDefault()
+    if (!contact.email) {
+      setContactStatus('error'); setContactMsg('Email is required'); return
+    }
+    setContactStatus('sending')
+    try {
+      const res = await fetch('/api/contact', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ ...contact, type: 'contact' }),
+      })
+      const data = await res.json()
+      if (res.ok) {
+        setContactStatus('success')
+        setContactMsg('Message sent! We\'ll respond within 24 hours.')
+        setContact({ name: '', email: '', subject: 'General inquiry', message: '' })
+      } else {
+        setContactStatus('error'); setContactMsg(data.error || 'Failed to send')
+      }
+    } catch {
+      setContactStatus('error'); setContactMsg('Network error. Please try again.')
+    }
+  }
+
+  async function handleNewsletterSubmit(e) {
+    e.preventDefault()
+    if (!newsletterEmail) return
+    setNewsletterStatus('sending')
+    try {
+      const res = await fetch('/api/contact', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email: newsletterEmail, type: 'newsletter' }),
+      })
+      if (res.ok) {
+        setNewsletterStatus('success')
+        setNewsletterEmail('')
+      } else {
+        setNewsletterStatus('idle')
+      }
+    } catch {
+      setNewsletterStatus('idle')
+    }
+  }
+
   return (
     <main id="top">
       <div className="press-marks" aria-hidden="true">
@@ -58,23 +114,35 @@ export default function Contact() {
           </div>
         </div>
       </section>
+
+      {/* Contact form — now functional */}
       <section className="sheet" style={{ borderTop: 'var(--rule-ink)', paddingBlock: 'clamp(var(--space-xl), 5vw, var(--space-3xl))' }}>
         <div className="spine__head" style={{ marginBottom: 'var(--space-xl)' }}>
           <p className="spine__eyebrow">Send a Message</p>
           <h2 className="spine__title">Write to <span style={{ color: 'var(--color-accent)' }}>Us</span></h2>
         </div>
-        <div style={{ maxWidth: '40rem' }}>
+        <form style={{ maxWidth: '40rem' }} onSubmit={handleContactSubmit}>
           <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 'var(--space-sm)', marginBottom: 'var(--space-sm)' }}>
-            <input type="text" placeholder="Your name" className="input-broadsheet" />
-            <input type="email" placeholder="Your email" className="input-broadsheet" />
+            <input type="text" placeholder="Your name" className="input-broadsheet"
+              value={contact.name} onChange={e => setContact({ ...contact, name: e.target.value })} />
+            <input type="email" placeholder="Your email" required className="input-broadsheet"
+              value={contact.email} onChange={e => setContact({ ...contact, email: e.target.value })} />
           </div>
-          <select className="input-broadsheet" style={{ marginBottom: 'var(--space-sm)', fontFamily: 'var(--font-mono)', fontSize: 'var(--text-sm)' }}>
+          <select className="input-broadsheet" style={{ marginBottom: 'var(--space-sm)', fontFamily: 'var(--font-mono)', fontSize: 'var(--text-sm)' }}
+            value={contact.subject} onChange={e => setContact({ ...contact, subject: e.target.value })}>
             <option>General inquiry</option><option>Press / media</option><option>Legal support</option><option>Medical aid</option><option>Volunteer</option>
           </select>
-          <textarea placeholder="Your message" className="input-broadsheet" rows={5} style={{ marginBottom: 'var(--space-md)', resize: 'vertical' }} />
-          <button className="btn">Send →</button>
-        </div>
+          <textarea placeholder="Your message" className="input-broadsheet" rows={5}
+            style={{ marginBottom: 'var(--space-md)', resize: 'vertical' }}
+            value={contact.message} onChange={e => setContact({ ...contact, message: e.target.value })} />
+          <button type="submit" className="btn" disabled={contactStatus === 'sending'}>
+            {contactStatus === 'sending' ? 'Sending…' : 'Send →'}
+          </button>
+          {contactStatus === 'success' && <p style={{ marginTop: 'var(--space-sm)', color: 'var(--color-teal)', fontFamily: 'var(--font-display)', fontSize: 'var(--text-lg)', textTransform: 'uppercase' }}>✅ {contactMsg}</p>}
+          {contactStatus === 'error' && <p style={{ marginTop: 'var(--space-sm)', color: 'var(--color-accent)', fontFamily: 'var(--font-mono)', fontSize: 'var(--text-sm)' }}>⚠️ {contactMsg}</p>}
+        </form>
       </section>
+
       <section className="sheet" style={{ borderTop: 'var(--rule-ink)', paddingBlock: 'clamp(var(--space-xl), 5vw, var(--space-3xl))' }}>
         <div className="spine__head" style={{ marginBottom: 'var(--space-xl)' }}>
           <p className="spine__eyebrow">Frequently Asked</p>
@@ -92,16 +160,22 @@ export default function Contact() {
           ))}
         </div>
       </section>
+
+      {/* Newsletter — now functional */}
       <section className="sheet pledge" style={{ marginTop: 'var(--space-xl)' }}>
         <h2 className="pledge__call">A reminder,<br />not a <span className="red">sign-up</span>.</h2>
         <div className="pledge__action">
-          <div style={{ display: 'flex', gap: 'var(--space-sm)', flexWrap: 'wrap' }}>
-            <input type="email" placeholder="your@email.com" className="input-broadsheet" style={{ minWidth: '200px' }} />
-            <button className="btn">Stay Updated →</button>
-          </div>
+          <form onSubmit={handleNewsletterSubmit} style={{ display: 'flex', gap: 'var(--space-sm)', flexWrap: 'wrap' }}>
+            <input type="email" placeholder="your@email.com" className="input-broadsheet" style={{ minWidth: '200px' }}
+              value={newsletterEmail} onChange={e => setNewsletterEmail(e.target.value)} required />
+            <button type="submit" className="btn" disabled={newsletterStatus === 'sending'}>
+              {newsletterStatus === 'sending' ? '…' : newsletterStatus === 'success' ? '✅ Done' : 'Stay Updated →'}
+            </button>
+          </form>
           <p className="pledge__small">We never sell your details. One email per week. Unsubscribe anytime.</p>
         </div>
       </section>
+
       <footer className="sheet colophon">
         <div>
           <p className="colophon__mark">Stand With Sonam Wangchuk</p>

@@ -2,6 +2,35 @@ import { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
 
 export default function TakeAction() {
+  const [volunteer, setVolunteer] = useState({ name: '', email: '', phone: '', city: '', message: '' })
+  const [volunteerStatus, setVolunteerStatus] = useState('idle')
+  const [volunteerMsg, setVolunteerMsg] = useState('')
+
+  async function handleVolunteerSubmit(e) {
+    e.preventDefault()
+    if (!volunteer.email) {
+      setVolunteerStatus('error'); setVolunteerMsg('Email is required'); return
+    }
+    setVolunteerStatus('sending')
+    try {
+      const res = await fetch('/api/contact', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ ...volunteer, type: 'volunteer' }),
+      })
+      const data = await res.json()
+      if (res.ok) {
+        setVolunteerStatus('success')
+        setVolunteerMsg('Thank you for signing up! We\'ll reach out soon.')
+        setVolunteer({ name: '', email: '', phone: '', city: '', message: '' })
+      } else {
+        setVolunteerStatus('error'); setVolunteerMsg(data.error || 'Failed to submit')
+      }
+    } catch {
+      setVolunteerStatus('error'); setVolunteerMsg('Network error. Please try again.')
+    }
+  }
+
   return (
     <main id="top">
       <div className="press-marks" aria-hidden="true">
@@ -45,7 +74,7 @@ export default function TakeAction() {
         {[
           { icon: '01', title: 'Donate', desc: 'Fund legal aid, medical support for hunger strikers, protest logistics, and grassroots organizing across Ladakh and India. Every rupee is accounted for.', cta: 'Donate →', to: '/donate' },
           { icon: '02', title: 'Share', desc: 'Use our social media toolkit with pre-written posts, graphics, and hashtags. Every share reaches new people who can act. Copy, paste, post, amplify.', cta: 'Get Toolkit →', to: '/action#toolkit' },
-          { icon: '03', title: 'Volunteer', desc: 'Join local teams for protest support, legal aid clinics, medical coordination, media outreach, and community organizing. Sign up below.', cta: 'Sign Up →', to: '/contact' },
+          { icon: '03', title: 'Volunteer', desc: 'Join local teams for protest support, legal aid clinics, medical coordination, media outreach, and community organizing. Sign up below.', cta: 'Sign Up →', to: '/action#volunteer' },
           { icon: '04', title: 'Contact Your MP', desc: 'Your elected representative works for you. Email, call, or visit their office. Pre-written templates make it easy. Make them accountable.', cta: 'Find Your MP →', to: '/action#mps' },
           { icon: '05', title: 'Demand NEET Re-test', desc: 'Sign the petition demanding a full re-test after the NEET paper leak betrayed 1.4 million students. Justice, transparency, and accountability for every aspiring doctor in India.', cta: 'Sign Now →', to: '/action#petitions' },
           { icon: '06', title: 'Join Protests', desc: 'Upcoming peaceful demonstrations, vigils, and marches. Safety guidelines, legal rights information, and coordination channels available.', cta: 'Find Events →', to: '/action#events' },
@@ -84,23 +113,32 @@ export default function TakeAction() {
         </div>
       </section>
 
-      {/* Volunteer form */}
-      <section className="sheet" style={{ borderTop: 'var(--rule-ink)', paddingBlock: 'clamp(var(--space-xl), 5vw, var(--space-3xl))' }}>
+      {/* Volunteer form — now functional */}
+      <section className="sheet" id="volunteer" style={{ borderTop: 'var(--rule-ink)', paddingBlock: 'clamp(var(--space-xl), 5vw, var(--space-3xl))' }}>
         <div className="spine__head">
           <p className="spine__eyebrow">Get Involved</p>
           <h2 className="spine__title">Volunteer <span style={{ color: 'var(--color-accent)' }}>On the Ground</span></h2>
         </div>
-        <div style={{ maxWidth: '40rem' }}>
+        <form style={{ maxWidth: '40rem' }} onSubmit={handleVolunteerSubmit}>
           <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 'var(--space-sm)', marginBottom: 'var(--space-md)' }}>
-            <input type="text" placeholder="Your name" className="input-broadsheet" />
-            <input type="email" placeholder="Your email" className="input-broadsheet" />
-            <input type="tel" placeholder="Phone / WhatsApp" className="input-broadsheet" />
-            <input type="text" placeholder="City / Region" className="input-broadsheet" />
+            <input type="text" placeholder="Your name" className="input-broadsheet"
+              value={volunteer.name} onChange={e => setVolunteer({ ...volunteer, name: e.target.value })} />
+            <input type="email" placeholder="Your email" required className="input-broadsheet"
+              value={volunteer.email} onChange={e => setVolunteer({ ...volunteer, email: e.target.value })} />
+            <input type="tel" placeholder="Phone / WhatsApp" className="input-broadsheet"
+              value={volunteer.phone} onChange={e => setVolunteer({ ...volunteer, phone: e.target.value })} />
+            <input type="text" placeholder="City / Region" className="input-broadsheet"
+              value={volunteer.city} onChange={e => setVolunteer({ ...volunteer, city: e.target.value })} />
           </div>
           <textarea placeholder="How you want to help — legal, medical, media, organizing, tech, translation..."
-            className="input-broadsheet" rows={3} style={{ marginBottom: 'var(--space-md)', resize: 'vertical' }} />
-          <button className="btn">Submit →</button>
-        </div>
+            className="input-broadsheet" rows={3} style={{ marginBottom: 'var(--space-md)', resize: 'vertical' }}
+            value={volunteer.message} onChange={e => setVolunteer({ ...volunteer, message: e.target.value })} />
+          <button type="submit" className="btn" disabled={volunteerStatus === 'sending'}>
+            {volunteerStatus === 'sending' ? 'Submitting…' : 'Submit →'}
+          </button>
+          {volunteerStatus === 'success' && <p style={{ marginTop: 'var(--space-sm)', color: 'var(--color-teal)', fontFamily: 'var(--font-display)', fontSize: 'var(--text-lg)', textTransform: 'uppercase' }}>✅ {volunteerMsg}</p>}
+          {volunteerStatus === 'error' && <p style={{ marginTop: 'var(--space-sm)', color: 'var(--color-accent)', fontFamily: 'var(--font-mono)', fontSize: 'var(--text-sm)' }}>⚠️ {volunteerMsg}</p>}
+        </form>
       </section>
 
       <footer className="sheet colophon">
