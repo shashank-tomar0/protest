@@ -37,6 +37,10 @@ export default async function handler(req, res) {
 
     if (RESEND_API_KEY) {
       // Send email via Resend
+      // Uses onboarding@resend.dev until you verify a custom domain in Resend dashboard
+      const fromAddress = process.env.RESEND_DOMAIN
+        ? `Stand With Sonam <forms@${process.env.RESEND_DOMAIN}>`
+        : 'Stand With Sonam <onboarding@resend.dev>'
       const response = await fetch('https://api.resend.com/emails', {
         method: 'POST',
         headers: {
@@ -44,8 +48,9 @@ export default async function handler(req, res) {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-          from: 'Stand With Sonam <forms@standwithsonam.org>',
+          from: fromAddress,
           to: [CONTACT_EMAIL],
+          replyTo: email,
           subject: subjectLine,
           html: emailHtml,
         }),
