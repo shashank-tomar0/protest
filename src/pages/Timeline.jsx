@@ -91,7 +91,7 @@ export default function Timeline() {
         <div className="colophon__rule">
           <span>Set in Big Shoulders &amp; Fraunces · printed two-pass, off-register on purpose</span>
           <span>Protest Nº 001 · free to copy, free to post</span>
-          <a href="https://x.com/shashank1tomar" target="_blank" style="color:var(--color-accent);text-decoration:underline">Built by @shashank1tomar</a>
+          <a href="https://x.com/shashank1tomar" target="_blank" style={{ color: "var(--color-accent)", textDecoration: "underline" }}>Built by @shashank1tomar</a>
         </div>
       </footer>
     </main>

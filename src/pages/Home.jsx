@@ -228,7 +228,7 @@ export default function Home() {
           <Link to="/action">Take Action</Link><br />
           <Link to="/donate">Donate</Link><br />
           <a href="https://twitter.com/StandWithSonam" target="_blank">Twitter / X</a><br />
-          <a href="https://x.com/shashank1tomar" target="_blank" style="color:var(--color-accent);text-decoration:underline">Built by @shashank1tomar</a>
+          <a href="https://x.com/shashank1tomar" target="_blank" style={{ color: "var(--color-accent)", textDecoration: "underline" }}>Built by @shashank1tomar</a>
         </address>
         <div className="colophon__rule">
           <span>Set in Big Shoulders &amp; Fraunces · printed two-pass, off-register on purpose</span>
