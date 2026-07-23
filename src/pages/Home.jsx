@@ -82,8 +82,7 @@ export default function Home() {
       {/* ═══════════ HERO — Full-screen photo ═══════════ */}
       <section className="photo-hero" aria-label="Hero">
         <div className="photo-hero__bg">
-          <object data="/images/sonam-wangchuk-carried.svg" type="image/svg+xml"
-            aria-label="Sonam Wangchuk being carried by Delhi Police at Jantar Mantar, July 18, 2026"
+          <img src="/images/sonam-wangchuk-carried.jpg" alt="Sonam Wangchuk being carried by Delhi Police at Jantar Mantar, July 18, 2026"
             style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
         </div>
         <div className="photo-hero__content">
@@ -193,8 +192,7 @@ export default function Home() {
           </div>
           <div>
             <div className="photo-section__frame">
-              <object data="/images/sonam-wangchuk-carried.svg" type="image/svg+xml"
-                aria-label="Sonam Wangchuk being carried by police"
+              <img src="/images/sonam-wangchuk-carried.jpg" alt="Sonam Wangchuk being carried by police"
                 style={{ display: 'block', width: '100%' }} />
             </div>
           </div>
@@ -233,7 +231,7 @@ export default function Home() {
         <div className="colophon__rule">
           <span>Set in Big Shoulders &amp; Fraunces · printed two-pass, off-register on purpose</span>
           <span>Protest Nº 001 · free to copy, free to post</span>
-        </div>
+        <span>Built by <a href="https://github.com/shashank-tomar0" target="_blank" style="color:var(--color-accent);text-decoration:underline">shashank-tomar0</a></span></div>
       </footer>
     </main>
   )
