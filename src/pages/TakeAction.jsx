@@ -47,7 +47,7 @@ export default function TakeAction() {
           { icon: '02', title: 'Share', desc: 'Use our social media toolkit with pre-written posts, graphics, and hashtags. Every share reaches new people who can act. Copy, paste, post, amplify.', cta: 'Get Toolkit →', to: '/action#toolkit' },
           { icon: '03', title: 'Volunteer', desc: 'Join local teams for protest support, legal aid clinics, medical coordination, media outreach, and community organizing. Sign up below.', cta: 'Sign Up →', to: '/contact' },
           { icon: '04', title: 'Contact Your MP', desc: 'Your elected representative works for you. Email, call, or visit their office. Pre-written templates make it easy. Make them accountable.', cta: 'Find Your MP →', to: '/action#mps' },
-          { icon: '05', title: 'Sign Petitions', desc: 'Active petitions to Parliament, Supreme Court, NHRC, and the UN Human Rights Council. Add your name to the growing demand for justice.', cta: 'Sign Now →', to: '/action#petitions' },
+          { icon: '05', title: 'Demand NEET Re-test', desc: 'Sign the petition demanding a full re-test after the NEET paper leak betrayed 1.4 million students. Justice, transparency, and accountability for every aspiring doctor in India.', cta: 'Sign Now →', to: '/action#petitions' },
           { icon: '06', title: 'Join Protests', desc: 'Upcoming peaceful demonstrations, vigils, and marches. Safety guidelines, legal rights information, and coordination channels available.', cta: 'Find Events →', to: '/action#events' },
         ].map((a, i) => (
           <article key={a.title} className={`plank ${i % 2 === 0 ? 'plank--hang' : ''}`} style={{ '--i': i }}>

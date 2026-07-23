@@ -2,6 +2,8 @@ import { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
 
 const days = [
+  { day: '00', date: '2024–25', title: 'NEET Paper Leak Scandal',
+    desc: 'The NEET-UG exam paper is leaked on a massive scale — 1.4 million students\' futures compromised. The Supreme Court refuses a full re-test. The betrayal becomes a national symbol of education system rot, directly fueling Wangchuk\'s hunger strike for reform.' },
   { day: '01', date: 'Jun 29', title: 'Hunger Strike Begins',
     desc: 'Sonam Wangchuk starts an indefinite hunger strike at Jantar Mantar, New Delhi. His demands: full implementation of NEP 2020, Ladakh statehood with Sixth Schedule protections, and immediate release of all political prisoners.' },
   { day: '05', date: 'Jul 3', title: 'Students Rally',
@@ -51,9 +53,9 @@ export default function Timeline() {
             21 Days That Shook <span style={{ color: 'var(--color-accent)' }}>India</span>
           </h1>
           <p className="plank__gloss" style={{ maxWidth: '48ch', marginTop: 'var(--space-lg)' }}>
-            From the first day of the hunger strike at Jantar Mantar to the forced removal
-            and the Chalo Sansad march — a day-by-day account of the movement that captured
-            the world's attention.
+            From the NEET paper leak that exposed a broken system to the 21-day hunger strike
+            at Jantar Mantar, the forced removal, and the Chalo Sansad march — a day-by-day
+            account of the movement that captured the world's attention.
           </p>
         </div>
       </section>

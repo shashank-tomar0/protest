@@ -19,11 +19,12 @@ const tally = [
   '50M+ Viral Photo Views', '200+ Detained and Released',
   '15+ Countries in Solidarity', '500K+ Petition Signatures',
   '100+ Arrests at Chalo Sansad', '54 kg Weight at Removal',
+  '1.4M Students Betrayed', 'NEET 2024 Paper Leak',
 ]
 
 const planks = [
   { i: '01', title: 'Education Reform is a right, not a privilege.',
-    desc: '100,000 schools closed since 2020. 50,000 teacher vacancies. NEP 2020 exists on paper only. Every child in Ladakh and across India deserves a classroom with a trained teacher.' },
+    desc: '100,000 schools closed since 2020. 50,000 teacher vacancies. NEET paper leak exposed systemic corruption — 1.4 million students\' futures betrayed. NEP 2020 exists on paper only. Every child in Ladakh and across India deserves a classroom with a trained teacher and a fair exam.' },
   { i: '02', title: 'Ladakh Statehood. Land, jobs, culture.',
     desc: 'Full statehood with elected assembly. Article 371 protections for land, jobs, and culture. End bureaucratic rule from Delhi. Ladakhis decide Ladakh\'s future.' },
   { i: '03', title: 'Peaceful protest is not a crime.',

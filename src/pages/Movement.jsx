@@ -23,6 +23,8 @@ const timeline = [
     desc: 'First Ice Stupa prototype built to address water scarcity from glacial melt. Wins Rolex Award for Enterprise in 2016.' },
   { year: '2019', title: 'Article 370 Abrogated',
     desc: 'Ladakh becomes a Union Territory without a legislature. Mass protests begin demanding statehood and Sixth Schedule tribal protections.' },
+  { year: '2024–25', title: 'NEET Paper Leak Scandal',
+    desc: 'NEET-UG exam paper is leaked nationwide — 1.4 million students betrayed. Supreme Court refuses a full re-test. The scandal exposes a rotting education system and becomes a flashpoint for national outrage.' },
   { year: 'Jun 29, 2026', title: 'Hunger Strike Begins',
     desc: 'Wangchuk starts indefinite hunger strike at Jantar Mantar. Demands: education reform, Ladakh statehood, democratic rights.' },
   { year: 'Jul 18, 2026', title: 'Forced Removal — 6:30 AM',
