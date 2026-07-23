@@ -33,7 +33,7 @@ export default async function handler(req, res) {
     `
 
     const RESEND_API_KEY = process.env.RESEND_API_KEY
-    const CONTACT_EMAIL = process.env.CONTACT_EMAIL || 'hello@standwithsonam.org'
+    const CONTACT_EMAIL = process.env.CONTACT_EMAIL || 'shashanktomar912@gmail.com'
 
     if (RESEND_API_KEY) {
       // Send email via Resend
@@ -59,7 +59,7 @@ export default async function handler(req, res) {
       if (!response.ok) {
         const err = await response.text()
         console.error('Resend error:', err)
-        return res.status(500).json({ error: 'Failed to send email', detail: err })
+        return res.status(500).json({ error: 'Failed to send email' })
       }
     } else {
       // Dev fallback — just log
