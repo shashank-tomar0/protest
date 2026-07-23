@@ -141,6 +141,90 @@ export default function TakeAction() {
         </form>
       </section>
 
+      {/* Contact Your MP */}
+      <section className="sheet" id="mps" style={{ borderTop: 'var(--rule-ink)', paddingBlock: 'clamp(var(--space-xl), 5vw, var(--space-3xl))' }}>
+        <div className="spine__head">
+          <p className="spine__eyebrow">Contact Your MP</p>
+          <h2 className="spine__title">Make Them <span style={{ color: 'var(--color-accent)' }}>Accountable</span></h2>
+        </div>
+        <div style={{ maxWidth: '48rem' }}>
+          <p className="plank__gloss" style={{ marginBottom: 'var(--space-lg)' }}>
+            Your elected representative works for you. Call, email, or visit their office.
+            Demand they raise the Ladakh statehood and education reform crisis in Parliament.
+          </p>
+          <div className="bill">
+            <div className="bill__line">
+              <span className="bill__k">Template — Email</span>
+              <p className="bill__v" style={{ fontSize: 'clamp(0.875rem, 1.5vw, 1.125rem)', fontFamily: 'var(--font-mono)', fontWeight: 400, textTransform: 'none' }}>
+                "I am writing to demand immediate action on the Sonam Wangchuk hunger strike and Ladakh statehood. As your constituent, I ask you to: 1) Raise the issue in Parliament, 2) Demand implementation of NEP 2020, 3) Support Sixth Schedule protections for Ladakh. The world is watching. — A concerned citizen"
+              </p>
+            </div>
+            <div className="bill__line">
+              <span className="bill__k">Find Your MP</span>
+              <p className="bill__v" style={{ fontSize: 'clamp(0.875rem, 1.5vw, 1.125rem)', fontFamily: 'var(--font-mono)', fontWeight: 400, textTransform: 'none' }}>
+                Visit <a href="https://sansad.in" target="_blank" style={{ color: 'var(--color-accent)', textDecoration: 'underline' }}>sansad.in</a> or SMS "MP {'<pin-code>'}" to 51969 to find your Lok Sabha representative's contact details.
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Demand NEET Re-test */}
+      <section className="sheet" id="petitions" style={{ borderTop: 'var(--rule-ink)', paddingBlock: 'clamp(var(--space-xl), 5vw, var(--space-3xl))' }}>
+        <div className="spine__head">
+          <p className="spine__eyebrow">Demand NEET Re-test</p>
+          <h2 className="spine__title">Justice for 1.4 <span style={{ color: 'var(--color-accent)' }}>Million</span></h2>
+        </div>
+        <div style={{ maxWidth: '48rem' }}>
+          <p className="plank__gloss" style={{ marginBottom: 'var(--space-lg)' }}>
+            The NEET-UG paper leak betrayed the dreams of 1.4 million medical aspirants. The Supreme Court refused a full re-test. Sign these petitions demanding accountability and a fair examination.
+          </p>
+          <div className="bill">
+            <div className="bill__line">
+              <span className="bill__k">Petition 1</span>
+              <p style={{ fontSize: 'var(--text-base)', lineHeight: 'var(--lh-body)' }}>
+                <strong>Supreme Court review petition:</strong> Demand a full re-test, CBI investigation, and strict action against the leak network.
+              </p>
+              <a href="https://change.org" target="_blank" className="btn" style={{ marginTop: 'var(--space-md)' }}>Sign on Change.org →</a>
+            </div>
+            <div className="bill__line">
+              <span className="bill__k">Petition 2</span>
+              <p style={{ fontSize: 'var(--text-base)', lineHeight: 'var(--lh-body)' }}>
+                <strong>Parliamentary committee:</strong> Demand the Ministry of Education conduct a transparent re-test within 90 days.
+              </p>
+              <a href="https://petitions.gov.in" target="_blank" className="btn" style={{ marginTop: 'var(--space-md)' }}>Sign on petitions.gov.in →</a>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Join Protests */}
+      <section className="sheet" id="events" style={{ borderTop: 'var(--rule-ink)', paddingBlock: 'clamp(var(--space-xl), 5vw, var(--space-3xl))' }}>
+        <div className="spine__head">
+          <p className="spine__eyebrow">Upcoming Events</p>
+          <h2 className="spine__title">Show Up. Be <span style={{ color: 'var(--color-accent)' }}>Counted.</span></h2>
+        </div>
+        <div style={{ maxWidth: '48rem' }}>
+          <div className="bill">
+            <div className="bill__line">
+              <span className="bill__k">Ongoing</span>
+              <p className="bill__v" style={{ fontSize: 'clamp(1.25rem, 2.5vw, 1.75rem)' }}>Jantar Mantar — Daily Protest</p>
+              <p className="bill__note">Daily peaceful sit-in at Jantar Mantar, New Delhi, demanding Ladakh statehood and education reform. Join the hunger strikers in solidarity from 8 AM to 8 PM.</p>
+            </div>
+            <div className="bill__line">
+              <span className="bill__k">Next Action</span>
+              <p className="bill__v" style={{ fontSize: 'clamp(1.25rem, 2.5vw, 1.75rem)' }}>Nationwide Solidarity Day</p>
+              <p className="bill__note">Simultaneous protests in Delhi, Leh, Kargil, Mumbai, Bengaluru, Chennai, Kolkata, and Hyderabad. Watch this space for the confirmed date.</p>
+            </div>
+            <div className="bill__line">
+              <span className="bill__k">Legal</span>
+              <p className="bill__v" style={{ fontSize: 'clamp(1.25rem, 2.5vw, 1.75rem)' }}>Know Your Rights</p>
+              <p className="bill__note">If detained at a protest: stay calm, ask for legal aid, do not resist arrest. Contact legal@standwithsonam.org for pro-bono counsel. Our legal team is on standby.</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
       <footer className="sheet colophon">
         <div>
           <p className="colophon__mark">Stand With Sonam Wangchuk</p>
