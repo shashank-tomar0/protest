@@ -227,12 +227,13 @@ export default function Home() {
           Jantar Mantar, New Delhi · July 2026<br />
           <Link to="/action">Take Action</Link><br />
           <Link to="/donate">Donate</Link><br />
-          <a href="https://twitter.com/StandWithSonam" target="_blank">Twitter / X</a>
+          <a href="https://twitter.com/StandWithSonam" target="_blank">Twitter / X</a><br />
+          <a href="https://x.com/shashank1tomar" target="_blank" style="color:var(--color-accent);text-decoration:underline">Built by @shashank1tomar</a>
         </address>
         <div className="colophon__rule">
           <span>Set in Big Shoulders &amp; Fraunces · printed two-pass, off-register on purpose</span>
           <span>Protest Nº 001 · free to copy, free to post</span>
-        <span>Built by <a href="https://github.com/shashank-tomar0" target="_blank" style={{ color: 'var(--color-accent)', textDecoration: 'underline' }}>shashank-tomar0</a></span></div>
+        </div>
       </footer>
     </main>
   )
